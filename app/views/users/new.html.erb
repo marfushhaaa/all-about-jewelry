@@ -1,0 +1,34 @@
+<h1>Users#new</h1>
+<%= form_with model: @user do |f| %>
+  <% if @user.errors.any? %>
+    <div>
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div>
+    <%= f.label :name %><br>
+    <%= f.text_field :name, required: true %>
+  </div>
+  <div>
+    <%= f.label :username %><br>
+    <%= f.text_field :username, required: true %>
+  </div>
+  <div>
+    <%= f.label :email %><br>
+    <%= f.email_field :email_address, required: true %>
+  </div>
+  <div>
+    <%= f.label :password %><br>
+    <%= f.password_field :password, required: true %>
+  </div>
+  <div>
+      <%= f.collection_radio_buttons :role, User.roles.keys, :itself, :humanize %>
+   </div>
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>

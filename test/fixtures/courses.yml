@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  start_date: 2026-09-21 09:45:45
+  end_date: 2026-09-21 09:45:45
+  max_participants: 1
+  creator: one
+
+two:
+  name: MyString
+  description: MyText
+  start_date: 2026-09-21 09:45:45
+  end_date: 2026-09-21 09:45:45
+  max_participants: 1
+  creator: two

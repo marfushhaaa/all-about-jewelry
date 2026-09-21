@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "courses/index"
+  get "courses/details"
   get "user_sessions/new"
   get "user_sessions/create"
   get "users/index"

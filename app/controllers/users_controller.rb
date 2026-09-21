@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  allow_unauthenticated_access only: %i[index new create]
+
   def index
     @users = User.all
   end
@@ -12,6 +14,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      start_new_session_for @user
       flash[:notice] = "User created successfully"
       redirect_to users_path
     else
@@ -23,6 +26,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :username, :email, :role, :password)
+    params.require(:user).permit(:username, :email_address, :role, :password)
   end
 end

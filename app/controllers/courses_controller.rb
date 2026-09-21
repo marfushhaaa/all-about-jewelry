@@ -5,7 +5,7 @@ class CoursesController < ApplicationController
   end
 
   def details
-    if current_user.blank?
+    if !authenticated?
       render plain: '401 Unauthorized', status: :unauthorized
     end
   end

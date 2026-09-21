@@ -28,9 +28,10 @@ Die wichtigste funktionale Anforderung für die erste Iteration ist die Erstellu
 ## Locking und Transaktionen 
 Kursbuchung: Beim Buchen von Kursen mit dem begrenzten Benutzeranzahl, muss geprüft werden, ob noch Plätze frei sind, und gleichzeitig die Buchung erstellt werden. Zwischen Prüfung und Speicherung kann ein anderer Benutzer denselben letzten Platz buchen (Race Condition). Deshalb wird der Kurs innerhalb einer Transaktion pessimistisch gesperrt (kurs.with_lock), damit die Platzzahl nie überschritten wird. Zusätzlich verhindert ein Unique Index auf (kurs_id, benutzer_id), dass jemand sich versehentlich doppelt anmeldet.
 ## ERM (Entity-Relationship-Model)
+fk_users und fk_course sind in der Tabelle Unique Index, users.role und booking.status sind enums.
 ![ERM](images/AllAboutJewelry_v2.png)
 ## Breadboards
-![Breadboard](images/breadboard_v1.jpg)
+![Breadboard](images/breadboard_v2.jpg)
 ## Fat-Marker-Sketches
 ![Fat-Sketch](images/fat_sketch_v1.jpg)
 

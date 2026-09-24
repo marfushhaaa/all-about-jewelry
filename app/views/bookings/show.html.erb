@@ -1,0 +1,9 @@
+<h1>Buchung bestätigt</h1>
+
+<div>
+  <h2><%= @booking.course.name %></h2>
+  <p><%= course_date(@booking.course.start_date) %></p>
+  <p>Gebucht am <%= l @booking.created_at, format: :short %></p>
+</div>
+
+<%= link_to "Zu meinen Buchungen", account_path %>

@@ -13,4 +13,18 @@
         data: { turbo_confirm: "Kurs wirklich löschen?" } %>
 <% end %>
 
+<p><strong><%= @course.free_places %> von <%= @course.max_participants %> Plätzen frei</strong></p>
+
+<% if @course.bookable_by?(Current.user) %>
+  <%= link_to "Kurs buchen", new_course_booking_path(@course) %>
+<% elsif @course.full? %>
+  <p>Dieser Kurs ist ausgebucht.</p>
+<% elsif Current.user && @course.creator_id == Current.user.id %>
+  <p>Das ist dein eigener Kurs.</p>
+<% elsif Current.user %>
+  <p>Du hast diesen Kurs bereits gebucht.</p>
+<% else %>
+  <%= link_to "Zum Buchen anmelden", new_session_path %>
+<% end %>
+
 <%= link_to "Zurück", courses_path %>

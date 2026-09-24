@@ -1,6 +1,6 @@
 <h1><%= @course.name %></h1>
 <p>von <%= @course.creator.username %></p>
-<p><%= l @course.start_date, format: :short %> – <%= l @course.end_date, format: :short %></p>
+<p><%= course_date(@course.start_date) %> – <%= course_date(@course.end_date) %></p>
 <p><%= simple_format @course.description %></p>
 <p>Maximal <%= @course.max_participants %> Teilnehmende</p>
 

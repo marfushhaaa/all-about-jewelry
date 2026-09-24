@@ -10,6 +10,6 @@
 <% @courses.each do |course| %>
   <div>
     <h2><%= link_to course.name, course %></h2>
-    <p><%= l course.start_date, format: :short %> · von <%= course.creator.username %></p>
+    <p><%= course_date(course.start_date) %> · von <%= course.creator.username %></p>
   </div>
 <% end %>

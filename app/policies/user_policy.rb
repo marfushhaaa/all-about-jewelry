@@ -9,6 +9,10 @@ class UserPolicy < ApplicationPolicy
     user&.admin?
   end
 
+  def destroy?
+    user&.admin? && user != record   # Admin darf sich nicht selbst löschen
+  end
+
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
     # def resolve

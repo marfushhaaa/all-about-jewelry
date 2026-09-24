@@ -1,6 +1,24 @@
-<h1>Admin::Users#index</h1>
-<ul>
+<h1>Alle Benutzer</h1>
+
+<table>
+  <tr>
+    <th>Username</th>
+    <th>E-Mail</th>
+    <th>Rolle</th>
+    <th></th>
+  </tr>
   <% @users.each do |user| %>
-    <li><%= user.username %> | <%= user.email_address %></li>
+    <tr>
+      <td><%= user.username %></td>
+      <td><%= user.email_address %></td>
+      <td><%= user.role %></td>
+      <td>
+        <% if policy(user).destroy? %>
+          <%= button_to "Löschen", admin_user_path(user),
+                method: :delete,
+                data: { turbo_confirm: "#{user.username} wirklich löschen?" } %>
+        <% end %>
+      </td>
+    </tr>
   <% end %>
-</ul>
+</table>

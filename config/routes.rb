@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   resources :courses, only: [:index, :show]
 
   namespace :admin do
-    resources :users, only: [:index]
+    resources :users, only: [:index, :destroy]
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

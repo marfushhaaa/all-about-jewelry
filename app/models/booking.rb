@@ -2,6 +2,7 @@
 class Booking < ApplicationRecord
   belongs_to :user
   belongs_to :course
+  audited
 
   enum :status, { confirmed: "confirmed", cancelled: "cancelled" }
 

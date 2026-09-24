@@ -5,6 +5,22 @@ class BookingPolicy < ApplicationPolicy
   # code, beware of possible changes to the ancestors:
   # https://gist.github.com/Burgestrand/4b4bc22f31c8a95c425fc0e30d7ef1f5
 
+  def new?
+    record.is_a?(Course) ? record.bookable_by?(user) : false
+  end
+
+  def create?
+    new?
+  endgit
+
+  def show?
+    user.present? && (record.user_id == user.id || user.admin?)
+  end
+
+  def destroy?
+    user.present? && record.user_id == user.id && record.confirmed?
+  end
+
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
     # def resolve

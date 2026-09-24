@@ -1,0 +1,13 @@
+<h1>Profil bearbeiten</h1>
+
+<%= form_with model: @user, url: account_path, method: :patch do |f| %>
+  <%= f.label :username %><br>
+  <%= f.text_field :username %>
+
+  <%= f.label :email_address, "E-Mail" %><br>
+  <%= f.email_field :email_address %>
+
+  <%= f.submit "Speichern" %>
+<% end %>
+
+<%= link_to "Abbrechen", account_path %>

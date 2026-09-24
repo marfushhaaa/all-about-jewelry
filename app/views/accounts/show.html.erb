@@ -1,0 +1,30 @@
+<h1>Mein Konto</h1>
+
+<p><%= @user.username %> · <%= @user.email_address %> · <%= @user.role %></p>
+<%= link_to "Profil bearbeiten", edit_account_path %>
+
+<% if policy(Course).create? %>
+  <h2>Meine Kurse</h2>
+  <%= link_to "Neuen Kurs erstellen", new_course_path %>
+  <% @own_courses.each do |course| %>
+    <div>
+      <%= link_to course.name, course %>
+      <%= course.confirmed_bookings.count %> / <%= course.max_participants %> gebucht
+      <%= link_to "Bearbeiten", edit_course_path(course) %>
+    </div>
+  <% end %>
+<% end %>
+
+<h2>Meine Buchungen</h2>
+<% if @bookings.empty? %>
+  <p>Noch keine Buchungen. <%= link_to "Kurse ansehen", courses_path %></p>
+<% end %>
+<% @bookings.each do |booking| %>
+  <div>
+    <%= link_to booking.course.name, booking.course %>
+    <%= course_date(booking.course.start_date) %>
+    <%= link_to "Details", booking %>
+    <%= button_to "Stornieren", booking, method: :delete,
+          data: { turbo_confirm: "Buchung wirklich stornieren?" } %>
+  </div>
+<% end %>

@@ -13,6 +13,13 @@ Rails.application.routes.draw do
   # alle actions des courses
   resources :courses
 
+  # kurs buchungen
+  resources :courses do
+    resource :booking, only: [:new, :create]   # /courses/:course_id/booking/new
+  end
+  resources :bookings, only: [:show, :destroy]
+  resource :account, only: [:show, :edit, :update]
+
   namespace :admin do
     resources :users, only: [:index, :destroy]
   end

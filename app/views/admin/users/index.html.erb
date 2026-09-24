@@ -25,10 +25,6 @@
 
 <% @audits.each do |audit| %>
   <li>
-    <%= l audit.created_at, format: :short %> —
-    <%= audit.user&.username || "System" %>
-    <%= audit.action %>
-    <%= audit.auditable_type %>
-    <%= audit.audited_changes.keys.join(", ") %>
+    <%= audit.user&.username || "System" %> <%= audit_sentence(audit) %>
   </li>
 <% end %>

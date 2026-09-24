@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
   resources :users, only: [:index, :new, :create]
-  resources :courses, only: [:index, :show]
+  
+  # alle actions des courses
+  resources :courses
 
   namespace :admin do
     resources :users, only: [:index, :destroy]

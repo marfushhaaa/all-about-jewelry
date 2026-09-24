@@ -25,7 +25,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     log_in_as users(:user)
     get courses_path
     assert_response :success
-    assert_select "h1", text: "Welcome, user"
+    assert_select "h1", text: "Willkommen zurück, user"
   end
 
   test "show als Gast zeigt Login-Link statt Buchen" do

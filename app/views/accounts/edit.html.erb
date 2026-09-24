@@ -1,13 +1,40 @@
-<h1>Profil bearbeiten</h1>
+<div class="container-narrow">
+  <div class="page-head">
+    <h1>Profil bearbeiten</h1>
+    <p>Benutzername und E-Mail-Adresse ändern.</p>
+  </div>
 
-<%= form_with model: @user, url: account_path, method: :patch do |f| %>
-  <%= f.label :username %><br>
-  <%= f.text_field :username %>
+  <div class="panel">
+    <%= form_with model: @user, url: account_path, method: :patch, class: "form-grid" do |f| %>
+      <% if @user.errors.any? %>
+        <div class="form-errors">
+          <strong>Das Profil konnte nicht gespeichert werden:</strong>
+          <ul>
+            <% @user.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-  <%= f.label :email_address, "E-Mail" %><br>
-  <%= f.email_field :email_address %>
+      <div class="field">
+        <%= f.label :username, "Benutzername" %>
+        <%= f.text_field :username, autocomplete: "username" %>
+      </div>
 
-  <%= f.submit "Speichern" %>
-<% end %>
+      <div class="field">
+        <%= f.label :email_address, "E-Mail" %>
+        <%= f.email_field :email_address, autocomplete: "email" %>
+      </div>
 
-<%= link_to "Abbrechen", account_path %>
+      <div class="form-actions">
+        <%= f.submit "Speichern", class: "submit-primary" %>
+        <%= link_to "Abbrechen", account_path %>
+      </div>
+    <% end %>
+  </div>
+
+  <p class="muted small" style="margin-top: 20px">
+    Passwort vergessen oder ändern? <%= link_to "Passwort zurücksetzen", new_password_path %>
+  </p>
+</div>

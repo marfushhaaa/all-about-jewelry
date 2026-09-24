@@ -1,30 +1,99 @@
-<h1><%= @course.name %></h1>
-<p>von <%= @course.creator.username %></p>
-<p><%= course_date(@course.start_date) %> – <%= course_date(@course.end_date) %></p>
-<p><%= simple_format @course.description %></p>
-<p>Maximal <%= @course.max_participants %> Teilnehmende</p>
+<div class="container">
+  <nav class="breadcrumb">
+    <%= link_to "Startseite", root_path %><span class="sep">›</span>
+    <%= link_to "Kurse", courses_path(anchor: "kurse") %><span class="sep">›</span>
+    <span class="current"><%= @course.name %></span>
+  </nav>
 
-<% if policy(@course).update? %>
-  <%= link_to "Bearbeiten", edit_course_path(@course) %>
-<% end %>
+  <div class="banner <%= course_art_class(@course) %>">
+    <div class="tags">
+      <% if @course.full? %>
+        <span class="pill pill-dark">Ausgebucht</span>
+      <% elsif @course.max_participants %>
+        <span class="pill pill-light"><%= @course.free_places %> <%= @course.free_places == 1 ? "Platz" : "Plätze" %> frei</span>
+      <% end %>
+      <span class="pill"><%= course_duration(@course) %></span>
+    </div>
+  </div>
 
-<% if policy(@course).destroy? %>
-  <%= button_to "Löschen", @course, method: :delete,
-        data: { turbo_confirm: "Kurs wirklich löschen?" } %>
-<% end %>
+  <div class="detail-grid">
+    <div>
+      <h1><%= @course.name %></h1>
 
-<p><strong><%= @course.free_places %> von <%= @course.max_participants %> Plätzen frei</strong></p>
+      <div class="creator-card">
+        <span class="avatar lg"><%= avatar_initial(@course.creator) %></span>
+        <div>
+          <strong>von <%= @course.creator.username %></strong>
+          <span>Kursleitung</span>
+        </div>
+      </div>
 
-<% if @course.bookable_by?(Current.user) %>
-  <%= link_to "Kurs buchen", new_course_booking_path(@course) %>
-<% elsif @course.full? %>
-  <p>Dieser Kurs ist ausgebucht.</p>
-<% elsif Current.user && @course.creator_id == Current.user.id %>
-  <p>Das ist dein eigener Kurs.</p>
-<% elsif Current.user %>
-  <p>Du hast diesen Kurs bereits gebucht.</p>
-<% else %>
-  <%= link_to "Zum Buchen anmelden", new_session_path %>
-<% end %>
+      <h3>Kursbeschreibung</h3>
+      <div class="prose">
+        <% if @course.description.present? %>
+          <%= simple_format @course.description %>
+        <% else %>
+          <p class="muted">Für diesen Kurs gibt es noch keine Beschreibung.</p>
+        <% end %>
+      </div>
 
-<%= link_to "Zurück", courses_path %>
+      <% if policy(@course).update? || policy(@course).destroy? %>
+        <div class="owner-actions">
+          <% if policy(@course).update? %>
+            <%= link_to "Bearbeiten", edit_course_path(@course), class: "btn btn-outline btn-sm" %>
+          <% end %>
+          <% if policy(@course).destroy? %>
+            <%= button_to "Löschen", @course, method: :delete, form_class: "inline-action",
+                  data: { turbo_confirm: "Kurs wirklich löschen?" } %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <aside class="side-card">
+      <% if @course.max_participants.nil? %>
+        <p class="big">Offen für alle</p>
+        <p class="sub">keine Teilnehmerbegrenzung · Anmeldung verbindlich</p>
+      <% elsif @course.full? %>
+        <p class="big">Ausgebucht</p>
+        <p class="sub">alle <%= @course.max_participants %> Plätze sind vergeben</p>
+      <% else %>
+        <p class="big"><%= @course.free_places %> <%= @course.free_places == 1 ? "Platz" : "Plätze" %> frei</p>
+        <p class="sub">von <%= @course.max_participants %> Plätzen · Anmeldung verbindlich</p>
+      <% end %>
+
+      <ul class="facts">
+        <li><span class="ic"><%= icon(:calendar) %></span><div><small>Datum</small><b><%= de_date(@course.start_date) %></b></div></li>
+        <li><span class="ic"><%= icon(:clock) %></span><div><small>Uhrzeit</small><b><%= de_time(@course.start_date) %> Uhr</b></div></li>
+        <li><span class="ic"><%= icon(:timer) %></span><div><small>Dauer</small><b><%= course_duration(@course) %></b></div></li>
+        <li><span class="ic"><%= icon(:flag) %></span><div><small>Ende</small><b><%= de_short(@course.end_date) %> Uhr</b></div></li>
+        <li><span class="ic"><%= icon(:users) %></span><div><small>Plätze</small>
+          <b><%= @course.max_participants ? "#{@course.free_places} von #{@course.max_participants} frei" : "Unbegrenzt" %></b></div></li>
+      </ul>
+
+      <% if @course.max_participants %>
+        <div class="progress-head">
+          <span><%= @course.confirmed_bookings.count %> Angemeldet</span>
+          <span>Max. <%= @course.max_participants %></span>
+        </div>
+        <div class="progress"><span style="width: <%= occupancy_percent(@course) %>%"></span></div>
+      <% end %>
+
+      <% if @course.bookable_by?(Current.user) %>
+        <%= link_to "Kurs buchen", new_course_booking_path(@course), class: "btn btn-primary" %>
+      <% elsif @course.full? %>
+        <p class="btn btn-disabled">Dieser Kurs ist ausgebucht.</p>
+      <% elsif Current.user && @course.creator_id == Current.user.id %>
+        <p class="btn btn-disabled">Das ist dein eigener Kurs.</p>
+      <% elsif Current.user %>
+        <p class="btn btn-disabled">Du hast diesen Kurs bereits gebucht.</p>
+        <p class="hint"><%= link_to "Zu meinen Buchungen", account_path %></p>
+      <% else %>
+        <%= link_to "Zum Buchen anmelden", new_session_path, class: "btn btn-primary" %>
+        <p class="hint">Noch kein Konto? <%= link_to "Jetzt registrieren", new_user_path %></p>
+      <% end %>
+    </aside>
+  </div>
+
+  <p style="margin-top: 40px"><%= link_to "← Zurück", courses_path(anchor: "kurse") %></p>
+</div>

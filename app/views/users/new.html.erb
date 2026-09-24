@@ -1,30 +1,72 @@
-<h1>Users#new</h1>
-<%= form_with model: @user do |f| %>
-  <% if @user.errors.any? %>
+<% content_for :auth, true %>
+<% content_for :title, "Registrieren · AllAroundJewelry" %>
+
+<div class="auth">
+  <div class="auth-visual art art-0 tint">
+    <%= link_to root_path, class: "logo light" do %>
+      <span class="sprig"><%= icon(:leaf) %></span><span><span class="a">AllAround</span><span class="j">Jewelry</span></span>
+    <% end %>
+    <div class="spacer"></div>
     <div>
+      <h2>Deine kreative Community wartet.</h2>
       <ul>
-        <% @user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
+        <li><span><%= icon(:globe) %></span>Zugang zu Online- und Offline-Kursen</li>
+        <li><span><%= icon(:spark) %></span>Werde selbst Kursleiterin und teile dein Wissen</li>
+        <li><span><%= icon(:chat) %></span>Tausche dich mit anderen Schmuck-Macherinnen aus</li>
+        <li><span><%= icon(:heart) %></span>Buchungen und Profile verwalten</li>
       </ul>
     </div>
-  <% end %>
-  <div>
-    <%= f.label :username %><br>
-    <%= f.text_field :username, required: true %>
   </div>
-  <div>
-    <%= f.label :email %><br>
-    <%= f.email_field :email_address, required: true %>
+
+  <div class="auth-form">
+    <div class="inner">
+      <%= link_to "← Zurück zu den Kursen", root_path, class: "back" %>
+      <h1>Konto erstellen</h1>
+      <p class="lead">Kostenlos registrieren und sofort Kurse buchen.</p>
+
+      <%= form_with model: @user, class: "form-grid" do |f| %>
+        <% if @user.errors.any? %>
+          <div class="form-errors">
+            <strong>Das Konto konnte nicht erstellt werden:</strong>
+            <ul>
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="field">
+          <%= f.label :username, "Benutzername" %>
+          <%= f.text_field :username, required: true, autocomplete: "username", placeholder: "Dein Benutzername" %>
+        </div>
+        <div class="field">
+          <%= f.label :email_address, "E-Mail-Adresse" %>
+          <%= f.email_field :email_address, required: true, autocomplete: "email", placeholder: "deine@email.ch" %>
+        </div>
+        <div class="field">
+          <%= f.label :password, "Passwort" %>
+          <%= f.password_field :password, required: true, autocomplete: "new-password", placeholder: "Dein Passwort", maxlength: 72 %>
+        </div>
+        <div class="field">
+          <span class="label">Ich möchte …</span>
+          <div class="role-choice">
+            <%= f.collection_radio_buttons :role, User.roles.keys, :itself, :humanize do |b| %>
+              <div>
+                <%= b.radio_button(checked: (@user.role || "user") == b.value) %>
+                <%= b.label do %>
+                  <%= b.value == "creator" ? "Kurse anbieten" : "Kurse besuchen" %>
+                  <small><%= b.value == "creator" ? "als Kursleiterin / Creator" : "als Teilnehmer/in" %></small>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <%= f.submit "Konto erstellen", class: "submit-primary" %>
+      <% end %>
+
+      <p class="switch">Bereits ein Konto? <%= link_to "Anmelden", new_session_path %></p>
+    </div>
   </div>
-  <div>
-    <%= f.label :password %><br>
-    <%= f.password_field :password, required: true %>
-  </div>
-  <div>
-      <%= f.collection_radio_buttons :role, User.roles.keys, :itself, :humanize %>
-   </div>
-  <p>
-    <%= f.submit %>
-  </p>
-<% end %>
+</div>

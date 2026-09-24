@@ -1,15 +1,81 @@
-<% if authenticated? %>
-  <h1>Welcome, <%= Current.user.username %></h1>
-<% else %>
-  <h1>This is the index page</h1>
-<% end %>
-<%= link_to 'Details page', '/courses/details' %>
-<% if policy(Course).create? %>
-  <%= link_to "Neuen Kurs erstellen", new_course_path %>
-<% end %>
-<% @courses.each do |course| %>
-  <div>
-    <h2><%= link_to course.name, course %></h2>
-    <p><%= course_date(course.start_date) %> · von <%= course.creator.username %></p>
+<% content_for :flush, true %>
+
+<section class="hero">
+  <div class="container">
+    <% if authenticated? %>
+      <span class="eyebrow">Schön, dass du da bist</span>
+      <h1>Willkommen zurück, <%= Current.user.username %></h1>
+      <p class="lead">
+        <% if policy(Course).create? %>
+          Entdecke neue Workshops, verwalte deine Buchungen oder teile dein Wissen mit einem eigenen Kurs.
+        <% else %>
+          Entdecke neue Workshops und verwalte deine Buchungen.
+        <% end %>
+      </p>
+      <div class="actions">
+        <a href="#kurse" class="btn btn-primary">Kurse entdecken →</a>
+        <% if policy(Course).create? %>
+          <%= link_to "Neuen Kurs erstellen", new_course_path, class: "btn btn-ghost-light" %>
+        <% else %>
+          <%= link_to "Mein Konto", account_path, class: "btn btn-ghost-light" %>
+        <% end %>
+      </div>
+    <% else %>
+      <span class="eyebrow">Handgemachter Schmuck</span>
+      <h1>Lerne Schmuck <em>selbst</em><br> zu erschaffen.</h1>
+      <p class="lead">
+        AllAroundJewelry verbindet Schmuck-Macherinnen und Neugierige auf einer Plattform.
+        Entdecke Kurse für Perlenschmuck, Drahtwickeln, Harzkunst und Makramee — online und offline in der Schweiz.
+      </p>
+      <div class="actions">
+        <a href="#kurse" class="btn btn-primary">Kurse entdecken →</a>
+        <%= link_to "Konto erstellen", new_user_path, class: "btn btn-ghost-light" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</section>
+
+<section class="courses-section" id="kurse">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <h2>Aktuelle Kurse</h2>
+        <p>Handverlesene Workshops von erfahrenen Schmuck-Macherinnen</p>
+      </div>
+      <% if policy(Course).create? %>
+        <%= link_to "Neuen Kurs erstellen", new_course_path, class: "btn btn-outline" %>
+      <% else %>
+        <%= link_to "Alle Kurse →", courses_path(anchor: "kurse"), class: "btn btn-outline" %>
+      <% end %>
+    </div>
+
+    <% if @courses.empty? %>
+      <div class="empty-state">Noch keine Kurse vorhanden.</div>
+    <% else %>
+      <div class="course-grid">
+        <% @courses.each do |course| %>
+          <article class="course-card">
+            <div class="media <%= course_art_class(course) %>">
+              <% if course.full? %>
+                <span class="status pill pill-dark">Ausgebucht</span>
+              <% end %>
+            </div>
+            <div class="body">
+              <h2><%= link_to course.name, course %></h2>
+              <p class="desc"><%= course.description %></p>
+              <ul class="meta">
+                <li><span class="ic"><%= icon(:calendar) %></span><%= de_date(course.start_date) %></li>
+                <li><span class="ic"><%= icon(:timer) %></span><%= de_time(course.start_date) %> · <%= course_duration(course) %></li>
+                <li><span class="ic"><%= icon(:user) %></span><%= course.creator.username %></li>
+              </ul>
+              <div class="foot">
+                <%= link_to "Details →", course, class: "more" %>
+                <span class="places"><%= places_short(course) %></span>
+              </div>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>

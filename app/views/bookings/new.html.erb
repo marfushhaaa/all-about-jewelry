@@ -1,15 +1,38 @@
-<h1>Buchung bestätigen</h1>
+<div class="container-narrow">
+  <nav class="breadcrumb">
+    <%= link_to "Startseite", root_path %><span class="sep">›</span>
+    <%= link_to @course.name, @course %><span class="sep">›</span>
+    <span class="current">Buchen</span>
+  </nav>
 
-<div>
-  <h2><%= @course.name %></h2>
-  <p><%= simple_format @course.description %></p>
-  <p><%= course_date(@course.start_date) %> – <%= course_date(@course.end_date) %></p>
-   <% if @course.max_participants %>
-      <p><strong><%= @course.free_places %> von <%= @course.max_participants %> Plätzen frei</strong></p>
-   <% else %>
-      <p><strong>Unbegrenzt viele Plätze</strong></p>
-   <% end %>
+  <div class="panel">
+    <h1>Buchung bestätigen</h1>
+    <p class="muted">Bitte prüfe die Angaben, bevor du verbindlich buchst.</p>
+
+    <div class="summary">
+      <div class="thumb <%= course_art_class(@course) %>"></div>
+      <div>
+        <h2><%= @course.name %></h2>
+        <ul class="meta">
+          <li><span class="ic"><%= icon(:calendar) %></span><%= de_date(@course.start_date) %></li>
+          <li><span class="ic"><%= icon(:clock) %></span><%= de_time(@course.start_date) %> Uhr · <%= course_duration(@course) %></li>
+          <li><span class="ic"><%= icon(:user) %></span><%= @course.creator.username %></li>
+          <li><span class="ic"><%= icon(:users) %></span>
+            <% if @course.max_participants %>
+              <strong><%= @course.free_places %> von <%= @course.max_participants %> Plätzen frei</strong>
+            <% else %>
+              <strong>Unbegrenzt viele Plätze</strong>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <% if @course.description.present? %>
+      <div class="prose muted"><%= simple_format @course.description %></div>
+    <% end %>
+
+    <%= button_to "Verbindlich buchen", course_booking_path(@course), form_class: "primary-action" %>
+    <p class="center" style="margin: 16px 0 0"><%= link_to "Abbrechen", @course %></p>
+  </div>
 </div>
-
-<%= button_to "Verbindlich buchen", course_booking_path(@course) %>
-<%= link_to "Abbrechen", @course %>

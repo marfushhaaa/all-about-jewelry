@@ -1,30 +1,64 @@
-<h1>Mein Konto</h1>
+<div class="container">
+  <div class="panel">
+    <div class="profile-head">
+      <span class="avatar xl"><%= avatar_initial(@user) %></span>
+      <div class="grow">
+        <h1>Mein Konto</h1>
+        <p class="muted" style="margin: 4px 0 0">
+          <%= @user.username %> · <%= @user.email_address %> ·
+          <span class="pill"><%= @user.creator? ? "Kursleitung" : "Teilnehmer/in" %></span>
+          <% if @user.admin? %><span class="pill pill-terra">Admin</span><% end %>
+        </p>
+      </div>
+      <%= link_to "Profil bearbeiten", edit_account_path, class: "btn btn-outline" %>
+    </div>
+  </div>
 
-<p><%= @user.username %> · <%= @user.email_address %> · <%= @user.role %></p>
-<%= link_to "Profil bearbeiten", edit_account_path %>
-
-<% if policy(Course).create? %>
-  <h2>Meine Kurse</h2>
-  <%= link_to "Neuen Kurs erstellen", new_course_path %>
-  <% @own_courses.each do |course| %>
-    <div>
-      <%= link_to course.name, course %>
-      <%= course.confirmed_bookings.count %> / <%= course.max_participants %> gebucht
-      <%= link_to "Bearbeiten", edit_course_path(course) %>
+  <% if policy(Course).create? %>
+    <div class="panel">
+      <div class="page-head row" style="margin-bottom: 8px">
+        <h2 style="margin: 0">Meine Kurse</h2>
+        <%= link_to "Neuen Kurs erstellen", new_course_path, class: "btn btn-primary btn-sm" %>
+      </div>
+      <% if @own_courses.empty? %>
+        <p class="muted" style="margin-top: 16px">Du hast noch keine Kurse erstellt.</p>
+      <% end %>
+      <ul class="list">
+        <% @own_courses.each do |course| %>
+          <li class="list-row">
+            <div class="info">
+              <%= link_to course.name, course, class: "title" %>
+              <span class="muted small"><%= de_date(course.start_date) %> · <%= de_time(course.start_date) %> Uhr</span>
+            </div>
+            <div class="actions">
+              <span class="pill"><%= course.confirmed_bookings.count %> / <%= course.max_participants || "∞" %> gebucht</span>
+              <%= link_to "Bearbeiten", edit_course_path(course) %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
     </div>
   <% end %>
-<% end %>
 
-<h2>Meine Buchungen</h2>
-<% if @bookings.empty? %>
-  <p>Noch keine Buchungen. <%= link_to "Kurse ansehen", courses_path %></p>
-<% end %>
-<% @bookings.each do |booking| %>
-  <div>
-    <%= link_to booking.course.name, booking.course %>
-    <%= course_date(booking.course.start_date) %>
-    <%= link_to "Details", booking %>
-    <%= button_to "Stornieren", booking, method: :delete,
-          data: { turbo_confirm: "Buchung wirklich stornieren?" } %>
+  <div class="panel">
+    <h2>Meine Buchungen</h2>
+    <% if @bookings.empty? %>
+      <p class="muted">Noch keine Buchungen. <%= link_to "Kurse ansehen", courses_path(anchor: "kurse") %></p>
+    <% end %>
+    <ul class="list">
+      <% @bookings.each do |booking| %>
+        <li class="list-row">
+          <div class="info">
+            <%= link_to booking.course.name, booking.course, class: "title" %>
+            <span class="muted small"><%= de_date(booking.course.start_date) %> · <%= de_time(booking.course.start_date) %> Uhr</span>
+          </div>
+          <div class="actions">
+            <%= link_to "Details", booking %>
+            <%= button_to "Stornieren", booking, method: :delete, form_class: "inline-action",
+                  data: { turbo_confirm: "Buchung wirklich stornieren?" } %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
   </div>
-<% end %>
+</div>

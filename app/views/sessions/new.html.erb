@@ -1,11 +1,44 @@
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
-<%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
+<% content_for :auth, true %>
+<% content_for :title, "Anmelden · AllAroundJewelry" %>
 
-<%= form_with url: session_path do |form| %>
-  <%= form.text_field :username, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your username", value: params[:username] %><br>
-  <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72 %><br>
-  <%= form.submit "Log in" %>
-<% end %>
-<br>
+<div class="auth">
+  <div class="auth-visual art art-3">
+    <%= link_to root_path, class: "logo light" do %>
+      <span class="sprig"><%= icon(:leaf) %></span><span><span class="a">AllAround</span><span class="j">Jewelry</span></span>
+    <% end %>
+    <div>
+      <p class="quote">„Jede Perle erzählt eine Geschichte — beginne deine heute.“</p>
+      <p class="cite">— Die AllAroundJewelry Community</p>
+    </div>
+  </div>
 
-<%= link_to "Forgot password?", new_password_path %>
+  <div class="auth-form">
+    <div class="inner">
+      <%= link_to "← Zurück zu den Kursen", root_path, class: "back" %>
+      <h1>Willkommen zurück!</h1>
+      <p class="lead">Melde dich an, um Kurse zu buchen und auf dein Profil zuzugreifen.</p>
+
+      <div class="flash-stack">
+        <%= tag.div(flash[:alert], class: "flash flash-alert") if flash[:alert] %>
+        <%= tag.div(flash[:notice], class: "flash flash-notice") if flash[:notice] %>
+      </div>
+
+      <%= form_with url: session_path, class: "form-grid" do |form| %>
+        <div class="field">
+          <%= form.label :username, "Benutzername" %>
+          <%= form.text_field :username, required: true, autofocus: true, autocomplete: "username", placeholder: "Dein Benutzername", value: params[:username] %>
+        </div>
+        <div class="field">
+          <div class="label-row">
+            <%= form.label :password, "Passwort" %>
+            <%= link_to "Vergessen?", new_password_path %>
+          </div>
+          <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "••••••••", maxlength: 72 %>
+        </div>
+        <%= form.submit "Anmelden", class: "submit-primary" %>
+      <% end %>
+
+      <p class="switch">Noch kein Konto? <%= link_to "Jetzt registrieren", new_user_path %></p>
+    </div>
+  </div>
+</div>

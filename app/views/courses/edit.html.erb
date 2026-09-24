@@ -1,3 +1,14 @@
-<h1>Kurs bearbeiten</h1>
-<%= render "form" %>
-<%= link_to "Abbrechen", @course %>
+<div class="container-narrow">
+  <nav class="breadcrumb">
+    <%= link_to "Startseite", root_path %><span class="sep">›</span>
+    <%= link_to @course.name, @course %><span class="sep">›</span>
+    <span class="current">Bearbeiten</span>
+  </nav>
+  <div class="page-head">
+    <h1>Kurs bearbeiten</h1>
+    <p><%= @course.name %></p>
+  </div>
+  <div class="panel">
+    <%= render "form" %>
+  </div>
+</div>

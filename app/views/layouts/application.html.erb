@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
   <head>
     <title><%= content_for(:title) || "All Around Jewelry" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -18,33 +18,86 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <nav>
-      <% if authenticated? %>
-         <%= link_to 'Log out', session_path, data: { turbo_method: :delete } %> |
-      <% else %>
-        <%= link_to "Log in", new_session_path %> |
-        <%= link_to "Sign up", new_user_path %> |
+    <% if content_for?(:auth) %>
+      <%# Login / Registrierung / Passwort: Vollbild ohne Navigation %>
+      <%= yield %>
+    <% else %>
+      <header class="site-header">
+        <div class="container">
+          <%= link_to root_path, class: "logo" do %>
+            <span class="sprig"><%= icon(:leaf) %></span><span><span class="a">AllAround</span><span class="j">Jewelry</span></span>
+          <% end %>
+
+          <nav class="nav">
+            <%= link_to "Kurse", courses_path %>
+            <% if authenticated? %>
+              <details class="user-menu">
+                <summary>
+                  <span class="avatar"><%= avatar_initial(Current.user) %></span>
+                  <%= Current.user.username %>
+                </summary>
+                <div class="dropdown">
+                  <%= link_to "Mein Konto", account_path %>
+                  <%= link_to "Profil bearbeiten", edit_account_path %>
+                  <% if policy(Course).create? %>
+                    <%= link_to "Kurs erstellen", new_course_path %>
+                  <% end %>
+                  <% if Current.user&.admin? %>
+                    <%= link_to "Alle Benutzer", admin_users_path %>
+                  <% end %>
+                  <hr>
+                  <%= link_to "Abmelden", session_path, data: { turbo_method: :delete }, class: "danger" %>
+                </div>
+              </details>
+            <% else %>
+              <%= link_to "Anmelden", new_session_path, class: "accent" %>
+              <%= link_to "Registrieren", new_user_path, class: "btn btn-primary" %>
+            <% end %>
+          </nav>
+        </div>
+      </header>
+
+      <% if flash.any? %>
+        <div class="container site-flash">
+          <div class="flash-stack">
+            <% flash.each do |type, msg| %>
+              <div class="flash <%= type.to_s == "notice" ? "flash-notice" : "flash-alert" %>"><%= msg %></div>
+            <% end %>
+          </div>
+        </div>
       <% end %>
-      <%= link_to "Courses", root_path %> |
-      <% if Current.user&.admin? %>
-        <%= link_to "Alle Benutzer", admin_users_path %> |
-      <% end %>
-      <% if policy(Course).create? %>
-        <%= link_to "Kurs erstellen", new_course_path %> |
-      <% end %>
-      <%= link_to "Mein Konto", account_path %>
-    </nav>
-    <% flash.each do |type, msg| %>
-      <div>
-        <%= msg %>
-      </div>
+
+      <main class="<%= content_for?(:flush) ? "page-flush" : "page" %>">
+        <%= yield %>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container">
+          <%= link_to root_path, class: "logo light" do %>
+            <span class="sprig"><%= icon(:leaf) %></span><span><span class="a">AllAround</span><span class="j">Jewelry</span></span>
+          <% end %>
+          <div class="links">
+            <%= link_to "Kurse", courses_path %>
+            <% if authenticated? %>
+              <%= link_to "Mein Konto", account_path %>
+            <% else %>
+              <%= link_to "Anmelden", new_session_path %>
+              <%= link_to "Registrieren", new_user_path %>
+            <% end %>
+          </div>
+          <span>© <%= Date.current.year %> AllAroundJewelry</span>
+        </div>
+      </footer>
     <% end %>
-    <%= yield %>
   </body>
 </html>

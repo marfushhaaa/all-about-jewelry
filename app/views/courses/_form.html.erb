@@ -1,6 +1,7 @@
-<%= form_with model: @course do |f| %>
+<%= form_with model: @course, class: "form-grid" do |f| %>
   <% if @course.errors.any? %>
-    <div style="color: red">
+    <div class="form-errors">
+      <strong>Der Kurs konnte nicht gespeichert werden:</strong>
       <ul>
         <% @course.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
@@ -9,30 +10,36 @@
     </div>
   <% end %>
 
-  <div>
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+  <div class="field">
+    <%= f.label :name, "Kursname" %>
+    <%= f.text_field :name, required: true, maxlength: 100, placeholder: "z. B. Perlenarmband für Anfänger" %>
   </div>
 
-  <div>
-    <%= f.label :description, "Beschreibung" %><br>
-    <%= f.text_area :description, rows: 6 %>
+  <div class="field">
+    <%= f.label :description, "Beschreibung" %>
+    <%= f.text_area :description, rows: 6, placeholder: "Was lernen die Teilnehmenden? Was wird mitgebracht?" %>
   </div>
 
-  <div>
-    <%= f.label :start_date, "Start" %><br>
-    <%= f.datetime_field :start_date %>
+  <div class="two">
+    <div class="field">
+      <%= f.label :start_date, "Start" %>
+      <%= f.datetime_field :start_date %>
+    </div>
+
+    <div class="field">
+      <%= f.label :end_date, "Ende" %>
+      <%= f.datetime_field :end_date %>
+      <p class="hint">Muss nach dem Start liegen.</p>
+    </div>
   </div>
 
-  <div>
-    <%= f.label :end_date, "Ende" %><br>
-    <%= f.datetime_field :end_date %>
+  <div class="field">
+    <%= f.label :max_participants, "Maximale Teilnehmerzahl" %>
+    <%= f.number_field :max_participants, min: 1, placeholder: "leer = unbegrenzt" %>
   </div>
 
-  <div>
-    <%= f.label :max_participants, "Maximale Teilnehmerzahl" %><br>
-    <%= f.number_field :max_participants %>
+  <div class="form-actions">
+    <%= f.submit @course.new_record? ? "Kurs erstellen" : "Änderungen speichern", class: "submit-primary" %>
+    <%= link_to "Abbrechen", @course.new_record? ? courses_path : @course %>
   </div>
-
-  <%= f.submit %>
 <% end %>

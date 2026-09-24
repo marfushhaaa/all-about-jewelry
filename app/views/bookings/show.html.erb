@@ -1,9 +1,30 @@
-<h1>Buchung bestätigt</h1>
+<div class="container-narrow">
+  <div class="panel center">
+    <div class="success-mark">✓</div>
+    <h1>Buchung bestätigt</h1>
+    <p class="muted">Wir freuen uns auf dich!</p>
 
-<div>
-  <h2><%= @booking.course.name %></h2>
-  <p><%= course_date(@booking.course.start_date) %></p>
-  <p>Gebucht am <%= l @booking.created_at, format: :short %></p>
+    <div class="summary" style="text-align: left">
+      <div class="thumb <%= course_art_class(@booking.course) %>"></div>
+      <div>
+        <h2><%= @booking.course.name %></h2>
+        <ul class="meta">
+          <li><span class="ic"><%= icon(:calendar) %></span><%= de_date(@booking.course.start_date) %></li>
+          <li><span class="ic"><%= icon(:clock) %></span><%= de_time(@booking.course.start_date) %> Uhr · <%= course_duration(@booking.course) %></li>
+          <li><span class="ic"><%= icon(:user) %></span><%= @booking.course.creator.username %></li>
+          <li><span class="ic"><%= icon(:receipt) %></span>Gebucht am <%= de_short(@booking.created_at) %></li>
+        </ul>
+        <% if @booking.cancelled? %>
+          <span class="pill">Storniert</span>
+        <% else %>
+          <span class="pill pill-ok">Bestätigt</span>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-actions" style="justify-content: center">
+      <%= link_to "Zu meinen Buchungen", account_path, class: "btn btn-primary" %>
+      <%= link_to "Zum Kurs", @booking.course, class: "btn btn-outline" %>
+    </div>
+  </div>
 </div>
-
-<%= link_to "Zu meinen Buchungen", account_path %>

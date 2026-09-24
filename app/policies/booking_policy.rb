@@ -11,7 +11,7 @@ class BookingPolicy < ApplicationPolicy
 
   def create?
     new?
-  endgit
+  end
 
   def show?
     user.present? && (record.user_id == user.id || user.admin?)

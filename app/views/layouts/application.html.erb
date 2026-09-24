@@ -31,7 +31,7 @@
         <%= link_to "Log in", new_session_path %> |
         <%= link_to "Sign up", new_user_path %> |
       <% end %>
-      <%= link_to "Courses", root_path %>
+      <%= link_to "Courses", root_path %> |
       <% if Current.user&.admin? %>
         <%= link_to "Alle Benutzer", admin_users_path %> |
       <% end %>

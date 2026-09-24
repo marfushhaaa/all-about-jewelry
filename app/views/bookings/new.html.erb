@@ -4,7 +4,11 @@
   <h2><%= @course.name %></h2>
   <p><%= simple_format @course.description %></p>
   <p><%= course_date(@course.start_date) %> – <%= course_date(@course.end_date) %></p>
-  <p>Freie Plätze: <%= @course.free_places %> von <%= @course.max_participants %></p>
+   <% if @course.max_participants %>
+      <p><strong><%= @course.free_places %> von <%= @course.max_participants %> Plätzen frei</strong></p>
+   <% else %>
+      <p><strong>Unbegrenzt viele Plätze</strong></p>
+   <% end %>
 </div>
 
 <%= button_to "Verbindlich buchen", course_booking_path(@course) %>

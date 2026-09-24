@@ -12,11 +12,12 @@ class Course < ApplicationRecord
   end
 
   def free_places
+    return Float::INFINITY if max_participants.nil?
     max_participants - confirmed_bookings.count
   end
 
   def full?
-    free_places <= 0
+    max_participants.present? && confirmed_bookings.count >= max_participants
   end
 
   def bookable_by?(user)

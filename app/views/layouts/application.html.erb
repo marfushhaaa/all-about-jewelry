@@ -35,6 +35,9 @@
       <% if Current.user&.admin? %>
         <%= link_to "Alle Benutzer", admin_users_path %>
       <% end %>
+      <% if policy(Course).create? %>
+        <%= link_to "Kurs erstellen", new_course_path %>
+      <% end %>
     </nav>
     <% flash.each do |type, msg| %>
       <div>

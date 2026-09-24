@@ -6,6 +6,24 @@ class Course < ApplicationRecord
   validates :max_participants, numericality: { greater_than: 0 }, allow_nil: true
   validate :end_after_start
 
+  # app/models/course.rb
+  def confirmed_bookings
+    bookings.where(status: "confirmed")
+  end
+
+  def free_places
+    max_participants - confirmed_bookings.count
+  end
+
+  def full?
+    free_places <= 0
+  end
+
+  def bookable_by?(user)
+    user.present? && creator_id != user.id && !full? &&
+      !confirmed_bookings.exists?(user_id: user.id)
+  end
+
   private
 
   def end_after_start

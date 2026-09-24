@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :courses, foreign_key: :creator_id, dependent: :destroy
   has_many :bookings, dependent: :destroy
+  has_many :booked_courses, through: :bookings, source: :course
   
   enum :role, { user: "user", creator: "creator" }
 

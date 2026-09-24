@@ -4,6 +4,7 @@ class Admin::UsersController < ApplicationController
   def index
     authorize User, :index?
     @users = User.all
+    @audits = Audited::Audit.order(created_at: :desc).includes(:user, :auditable).limit(50)
   end
 
   def destroy

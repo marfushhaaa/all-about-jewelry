@@ -9,6 +9,11 @@ class ApplicationController < ActionController::Base
   def pundit_user
     Current.user
   end
+
+  def user_not_authorized
+    redirect_to root_path, alert: "Kein Zugriff."
+  end
+
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
   helper_method :current_user

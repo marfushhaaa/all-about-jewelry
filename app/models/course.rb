@@ -3,8 +3,7 @@ class Course < ApplicationRecord
   has_many :bookings, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 100 }
-  validates :start_date, :end_date, presence: true
-  validates :max_participants, numericality: { greater_than: 0 }
+  validates :max_participants, numericality: { greater_than: 0 }, allow_nil: true
   validate :end_after_start
 
   private

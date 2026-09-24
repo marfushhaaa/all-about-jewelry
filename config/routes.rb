@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+
+  namespace :admin do
+    get "users/index"
+  end
+
   get "courses/details"
   
   resource :session
@@ -6,6 +11,9 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :new, :create]
   resources :courses, only: [:index, :show]
 
+  namespace :admin do
+    resources :users, only: [:index]
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

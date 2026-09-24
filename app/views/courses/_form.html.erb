@@ -1,0 +1,38 @@
+<%= form_with model: @course do |f| %>
+  <% if @course.errors.any? %>
+    <div style="color: red">
+      <ul>
+        <% @course.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :description, "Beschreibung" %><br>
+    <%= f.text_area :description, rows: 6 %>
+  </div>
+
+  <div>
+    <%= f.label :start_date, "Start" %><br>
+    <%= f.datetime_field :start_date %>
+  </div>
+
+  <div>
+    <%= f.label :end_date, "Ende" %><br>
+    <%= f.datetime_field :end_date %>
+  </div>
+
+  <div>
+    <%= f.label :max_participants, "Maximale Teilnehmerzahl" %><br>
+    <%= f.number_field :max_participants, min: 1 %>
+  </div>
+
+  <%= f.submit %>
+<% end %>

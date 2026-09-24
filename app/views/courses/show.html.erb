@@ -1,0 +1,16 @@
+<h1><%= @course.name %></h1>
+<p>von <%= @course.creator.username %></p>
+<p><%= l @course.start_date, format: :short %> – <%= l @course.end_date, format: :short %></p>
+<p><%= simple_format @course.description %></p>
+<p>Maximal <%= @course.max_participants %> Teilnehmende</p>
+
+<% if policy(@course).update? %>
+  <%= link_to "Bearbeiten", edit_course_path(@course) %>
+<% end %>
+
+<% if policy(@course).destroy? %>
+  <%= button_to "Löschen", @course, method: :delete,
+        data: { turbo_confirm: "Kurs wirklich löschen?" } %>
+<% end %>
+
+<%= link_to "Zurück", courses_path %>

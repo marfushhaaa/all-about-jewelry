@@ -26,18 +26,19 @@
   <body>
     <nav>
       <% if authenticated? %>
-         <%= link_to 'Log out', session_path, data: { turbo_method: :delete } %>
+         <%= link_to 'Log out', session_path, data: { turbo_method: :delete } %> |
       <% else %>
         <%= link_to "Log in", new_session_path %> |
         <%= link_to "Sign up", new_user_path %> |
       <% end %>
       <%= link_to "Courses", root_path %>
       <% if Current.user&.admin? %>
-        <%= link_to "Alle Benutzer", admin_users_path %>
+        <%= link_to "Alle Benutzer", admin_users_path %> |
       <% end %>
       <% if policy(Course).create? %>
-        <%= link_to "Kurs erstellen", new_course_path %>
+        <%= link_to "Kurs erstellen", new_course_path %> |
       <% end %>
+      <%= link_to "Mein Konto", account_path %>
     </nav>
     <% flash.each do |type, msg| %>
       <div>

@@ -1,9 +1,33 @@
 <% password_digest = BCrypt::Password.create("password") %>
 
-one:
-  email_address: one@example.com
+# Normaler Benutzer (Rolle "user")
+user:
+  username: user
+  email_address: user@example.com
   password_digest: <%= password_digest %>
+  role: user
+  admin: false
 
-two:
-  email_address: two@example.com
+# Kursersteller
+creator:
+  username: creator
+  email_address: creator@example.com
   password_digest: <%= password_digest %>
+  role: creator
+  admin: false
+
+# Zweiter Kursersteller (für Zugriffe auf fremde Datensätze)
+creator_two:
+  username: creator_two
+  email_address: creator_two@example.com
+  password_digest: <%= password_digest %>
+  role: creator
+  admin: false
+
+# Administrator
+admin:
+  username: admin
+  email_address: admin@example.com
+  password_digest: <%= password_digest %>
+  role: user
+  admin: true

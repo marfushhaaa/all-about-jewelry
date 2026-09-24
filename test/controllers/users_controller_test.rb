@@ -1,18 +1,47 @@
 require "test_helper"
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get users_index_url
+  test "index" do
+    get users_path
     assert_response :success
   end
 
-  test "should get new" do
-    get users_new_url
+  test "new" do
+    get new_user_path
     assert_response :success
   end
 
-  test "should get create" do
-    get users_create_url
-    assert_response :success
+  test "create als creator" do
+    assert_difference -> { User.count }, +1 do
+      post users_path, params: { user: {
+        username: "neu", email_address: "neu@example.com", role: "creator", password: "geheim123"
+      } }
+    end
+    assert_redirected_to root_path
+    assert User.find_by(username: "neu").creator?
+    assert cookies[:session_id].present?
+  end
+
+  test "create kann sich nicht selbst zum admin machen" do
+    post users_path, params: { user: {
+      username: "neu", email_address: "neu@example.com", password: "geheim123", admin: true
+    } }
+    assert_not User.find_by(username: "neu").admin?
+  end
+
+  test "create mit doppelter E-Mail schlägt fehl" do
+    assert_no_difference -> { User.count } do
+      post users_path, params: { user: {
+        username: "neu", email_address: users(:user).email_address, password: "geheim123"
+      } }
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test "create ohne Passwort schlägt fehl" do
+    assert_no_difference -> { User.count } do
+      post users_path, params: { user: { username: "neu", email_address: "neu@example.com" } }
+    end
+    assert_response :unprocessable_entity
   end
 end

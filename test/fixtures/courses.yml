@@ -1,17 +1,44 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Kurs mit freien Plätzen (10 Plätze, 1 bestätigte Buchung durch "user")
+open_course:
+  name: Ringe schmieden
+  description: Silberringe selbst herstellen
+  start_date: <%= 10.days.from_now.to_fs(:db) %>
+  end_date: <%= 11.days.from_now.to_fs(:db) %>
+  max_participants: 10
+  creator: creator
 
-one:
-  name: MyString
-  description: MyText
-  start_date: 2026-09-21 09:45:45
-  end_date: 2026-09-21 09:45:45
+# Ausgebuchter Kurs (1 Platz, belegt durch "creator_two")
+full_course:
+  name: Perlenketten
+  description: Ketten knüpfen
+  start_date: <%= 10.days.from_now.to_fs(:db) %>
+  end_date: <%= 11.days.from_now.to_fs(:db) %>
   max_participants: 1
-  creator: one
+  creator: creator
 
-two:
-  name: MyString
-  description: MyText
-  start_date: 2026-09-21 09:45:45
-  end_date: 2026-09-21 09:45:45
+# Kurs mit genau einem freien Platz (keine Buchungen)
+last_place_course:
+  name: Ohrringe
+  description: Ohrstecker gestalten
+  start_date: <%= 10.days.from_now.to_fs(:db) %>
+  end_date: <%= 11.days.from_now.to_fs(:db) %>
   max_participants: 1
-  creator: two
+  creator: creator
+
+# Eigener Kurs von "creator"
+creator_course:
+  name: Goldschmieden Grundkurs
+  description: Einführung
+  start_date: <%= 20.days.from_now.to_fs(:db) %>
+  end_date: <%= 21.days.from_now.to_fs(:db) %>
+  max_participants: 5
+  creator: creator
+
+# Eigener Kurs von "creator_two"
+creator_two_course:
+  name: Armbänder flechten
+  description: Lederarmbänder
+  start_date: <%= 20.days.from_now.to_fs(:db) %>
+  end_date: <%= 21.days.from_now.to_fs(:db) %>
+  max_participants: 5
+  creator: creator_two

@@ -1,4 +1,9 @@
 module SessionTestHelper
+  # Loggt über das echte Login-Formular ein (POST /session).
+  def log_in_as(user, password: "password")
+    post session_path, params: { username: user.username, password: password }
+  end
+
   def sign_in_as(user)
     Current.session = user.sessions.create!
 

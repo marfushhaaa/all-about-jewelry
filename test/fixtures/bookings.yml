@@ -1,11 +1,17 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Bestätigte Buchung von "user" auf den offenen Kurs
+confirmed:
+  user: user
+  course: open_course
+  status: confirmed
 
-one:
-  status: MyString
-  user: one
-  course: one
+# Belegt den einzigen Platz des ausgebuchten Kurses
+full_course_booking:
+  user: creator_two
+  course: full_course
+  status: confirmed
 
-two:
-  status: MyString
-  user: two
-  course: two
+# Stornierte Buchung von "user"
+cancelled:
+  user: user
+  course: creator_two_course
+  status: cancelled

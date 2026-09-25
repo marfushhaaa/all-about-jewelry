@@ -47,12 +47,6 @@ class CoursesController < ApplicationController
     redirect_to courses_path, status: :see_other, notice: "Kurs gelöscht."
   end
 
-  def details
-    if !authenticated?
-      render plain: '401 Unauthorized', status: :unauthorized
-    end
-  end
-
   private
 
   def set_course

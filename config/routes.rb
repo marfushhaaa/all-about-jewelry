@@ -4,8 +4,6 @@ Rails.application.routes.draw do
     get "users/index"
   end
 
-  get "courses/details"
-  
   resource :session
   resources :passwords, param: :token
   resources :users, only: [:new, :create]

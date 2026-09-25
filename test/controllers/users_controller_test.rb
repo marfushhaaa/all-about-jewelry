@@ -1,9 +1,9 @@
 require "test_helper"
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
-  test "index" do
-    get users_path
-    assert_response :success
+  test "Benutzerliste ist nicht öffentlich erreichbar" do
+    get "/users"
+    assert_response :not_found
   end
 
   test "new" do

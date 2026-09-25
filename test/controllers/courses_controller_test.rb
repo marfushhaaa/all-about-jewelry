@@ -63,16 +63,6 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  # details
-  test "details nur für eingeloggte Benutzer" do
-    get courses_details_path
-    assert_redirected_to new_session_path
-
-    log_in_as users(:user)
-    get courses_details_path
-    assert_response :success
-  end
-
   # new / create
   test "new als creator" do
     log_in_as users(:creator)

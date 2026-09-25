@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   
   resource :session
   resources :passwords, param: :token
-  resources :users, only: [:index, :new, :create]
+  resources :users, only: [:new, :create]
   
   # alle actions des courses
   resources :courses
